@@ -20,7 +20,10 @@ class Core:
 
         if args.quit:
             debug.i(tag, "Server shutdown...")
-            #sock.shutdown()
-        sock.catchData()
+            sock.shutdown()
+
+        return None
+
     def boot(self):
         sock.start(9091, self.callback)
+        sock.loop()

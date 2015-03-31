@@ -46,7 +46,7 @@ class ChatHandler(asynchat.async_chat):
         self.set_terminator('\n')
         self.buffer = []
         self.callback = callback
-        debug.i(tag, "3")
+        self.handle_write("Connection success")
 
     def collect_incoming_data(self, data):
         debug.i(tag, "2")

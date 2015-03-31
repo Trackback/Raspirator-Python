@@ -13,17 +13,19 @@ class Core:
         pass
 
     def callback(self, data):
-        debug.i(tag, data)
+        debug.i(tag, "'"+data+"'")
         args = commands.parse([data])
+
         if args.info:
             sock.say("You request info")
 
-        if args.quit:
+        elif args.quit:
             debug.i(tag, "Server shutdown...")
             sock.shutdown()
-
-        return None
+        else:
+            sock.say("Command "+data+" not found")
 
     def boot(self):
-        sock.start(9091, self.callback)
+        sock.start("localhost", 9091, self.callback)
         sock.loop()
+

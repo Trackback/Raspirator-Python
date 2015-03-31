@@ -20,4 +20,6 @@ class CommandsCenter:
         self.parser.add_argument('-q', '--quit', action="store_true", help="Exit")
 
     def parse(self, data):
-        return self.parser.parse_args(data)
+        (ns, args) = self.parser.parse_known_args(data)
+        return ns
+

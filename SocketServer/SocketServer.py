@@ -1,38 +1,77 @@
 __author__ = 'trackback'
-import asyncore, socket
+
+import asynchat
+import asyncore
+import socket
+import threading
 from Loger import Loger
 
 debug = Loger.Loger()
 tag = "Socket"
+chat_room = {}
 
 
 class SocketServer(asyncore.dispatcher):
     def __init__(self):
         pass
 
-    def start(self, port, callback):
-        asyncore.dispatcher.__init__(self)
+    def start(self, host, port, callback):
+        asyncore.dispatcher.__init__(self, map=chat_room)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.bind(('', port))
-        self.listen(1)
+        self.bind((host, port))
+        self.listen(5)
         self.callback = callback
 
     def handle_accept(self):
-        # when we get a client connection start a dispatcher for that
-        # client
-        socket, address = self.accept()
-        debug.i(tag, 'Connection by '+address[0])
-        EchoHandler(socket)
+        pair = self.accept()
+        if pair is not None:
+            sock, addr = pair
+            debug.i(tag, 'Incoming connection from %s' % repr(addr))
+            self.sock = sock
+            self.handler = ChatHandler(sock, self.callback)
 
     def loop(self):
-        asyncore.loop()
+        asyncore.loop(map=chat_room)
+
+    def say(self, data):
+        self.handler.handle_write(data)
+
+    def shutdown(self):
+        self.sock.close()
 
 
-class EchoHandler(asyncore.dispatcher_with_send):
+class ChatHandler(asynchat.async_chat):
+    def __init__(self, sock, callback):
+        asynchat.async_chat.__init__(self, sock=sock, map=chat_room)
+        self.set_terminator('\n')
+        self.buffer = []
+        self.callback = callback
+        debug.i(tag, "3")
+
+    def collect_incoming_data(self, data):
+        debug.i(tag, "2")
+        self.buffer.append(data)
+
+    def found_terminator(self):
+        debug.i(tag, "1")
+        msg = self.buffer
+        debug.i(tag, "12")
+        debug.i(tag, "Recived: "+msg)
+        for handler in chat_room.itervalues():
+            if hasattr(handler, 'push'):
+                debug.i(tag, "123")
+                data = bytes(msg, "UTF-8")
+                handler.push(data)
+        self.buffer = []
+
     def handle_read(self):
-        self.out_buffer = self.recv(1024)
-        if not self.out_buffer:
-            self.close()
-        data = self.out_buffer.decode("UTF-8")
-        debug.i(tag, data)
-        #self.callback(data)
+        data = self.recv(1024)
+        if data is None:
+            return
+        data = data.decode("UTF-8")
+        debug.i(tag, "read "+data)
+        self.callback(data)
+
+    def handle_write(self, data):
+        self.push(bytes(data, "UTF-8"))
+        self.initiate_send()

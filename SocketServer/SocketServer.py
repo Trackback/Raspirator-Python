@@ -6,7 +6,7 @@ import socket
 import threading
 from Loger import Loger
 
-debug = Loger.Loger()
+debug = Loger()
 tag = "Socket"
 chat_room = {}
 
@@ -73,5 +73,6 @@ class ChatHandler(asynchat.async_chat):
         self.callback(data)
 
     def handle_write(self, data):
-        self.push(bytes(data, "UTF-8"))
+        data = bytes(data, "UTF-8")
+        self.push(data)
         self.initiate_send()

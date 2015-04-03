@@ -1,2 +1,2 @@
-__author__ = 'Маришка'
+__author__ = 'trackback'
 from Core import Core

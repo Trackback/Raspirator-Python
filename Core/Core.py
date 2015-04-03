@@ -1,13 +1,16 @@
+import pyttsx
+
 __author__ = 'trackback'
 from SocketServer import SocketServer
 from Loger import Loger
 from CommandsCenter import CommandsCenter
 import subprocess
+from pyttsx import *
 
 tag = "CommandsCenter"
-sock = SocketServer.SocketServer()
-debug = Loger.Loger()
-commands = CommandsCenter.CommandsCenter()
+sock = SocketServer()
+debug = Loger()
+commands = CommandsCenter()
 
 class Core:
     def __init__(self):
@@ -33,6 +36,14 @@ class Core:
             text = args.echo.strip()
             debug.w(tag, text)
             sock.say("You say: "+text)
+        elif args.say:
+            tts = pyttsx.init()
+            tts.setProperty("rate", 140)
+            tts.setProperty('voice', bytes("russian", "UTF-8"))
+            text = args.say.strip()
+            tts.say(text)
+            tts.runAndWait()
+            tts.stop()
         else:
             sock.say("Command "+data+" not found")
 

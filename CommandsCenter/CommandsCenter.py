@@ -3,7 +3,7 @@ __author__ = 'trackback'
 import argparse
 from Loger import Loger
 
-debug = Loger.Loger()
+debug = Loger()
 tag = "CommandsCenter"
 
 
@@ -20,6 +20,7 @@ class CommandsCenter:
         self.parser.add_argument('-q', '--quit', action="store_true", help="Exit")
         self.parser.add_argument('-l', '--launch', action="store", help="Execute system command")
         self.parser.add_argument('-tell', '--echo', action='store', help="Echo text")
+        self.parser.add_argument('-s', '--say', action='store', help="Say text")
 
     def parse(self, data):
         print(data)

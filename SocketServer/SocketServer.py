@@ -6,7 +6,7 @@ import socket
 import threading
 from Loger import Loger
 
-debug = Loger()
+debug = Loger.Loger()
 tag = "Socket"
 chat_room = {}
 

@@ -3,7 +3,7 @@ __author__ = 'trackback'
 import argparse
 from Loger import Loger
 
-debug = Loger()
+debug = Loger.Loger()
 tag = "CommandsCenter"
 
 

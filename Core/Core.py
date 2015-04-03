@@ -8,9 +8,9 @@ import subprocess
 from pyttsx import *
 
 tag = "CommandsCenter"
-sock = SocketServer()
-debug = Loger()
-commands = CommandsCenter()
+sock = SocketServer.SocketServer()
+debug = Loger.Loger()
+commands = CommandsCenter.CommandsCenter()
 
 class Core:
     def __init__(self):

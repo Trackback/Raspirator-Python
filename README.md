@@ -1,4 +1,6 @@
 # Raspirator-Python
+Required Python 3.x!
+
 Raspirator [Python port]
 Hopefully, once it becomes a robot. Platform can be any OS with Python machine and GPIO output controller (recomended Raspberry pi)
 

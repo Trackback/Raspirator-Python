@@ -21,6 +21,7 @@ class SocketServer(asyncore.dispatcher):
         self.bind((host, port))
         self.listen(5)
         self.callback = callback
+        debug.i(tag, "Ready!")
 
     def handle_accept(self):
         pair = self.accept()

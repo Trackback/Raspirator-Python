@@ -49,17 +49,13 @@ class ChatHandler(asynchat.async_chat):
         self.handle_write("Connection success")
 
     def collect_incoming_data(self, data):
-        debug.i(tag, "2")
         self.buffer.append(data)
 
     def found_terminator(self):
-        debug.i(tag, "1")
         msg = self.buffer
-        debug.i(tag, "12")
         debug.i(tag, "Recived: "+msg)
         for handler in chat_room.itervalues():
             if hasattr(handler, 'push'):
-                debug.i(tag, "123")
                 data = bytes(msg, "UTF-8")
                 handler.push(data)
         self.buffer = []

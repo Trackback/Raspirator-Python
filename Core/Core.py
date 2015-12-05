@@ -19,7 +19,6 @@ class Core:
     def callback(self, data):
         debug.i(tag, "'"+data+"'")
         args = commands.parse([data])
-        print(args)
         if args.info:
             sock.say("You request info")
 

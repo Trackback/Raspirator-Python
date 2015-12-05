@@ -23,7 +23,6 @@ class CommandsCenter:
         self.parser.add_argument('-s', '--say', action='store', help="Say text")
 
     def parse(self, data):
-        print(data)
         (ns, args) = self.parser.parse_known_args(data)
         return ns
 
